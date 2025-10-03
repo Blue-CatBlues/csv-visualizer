@@ -1,0 +1,19 @@
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/python:3.10-slim
+
+WORKDIR /app
+
+# 安装依赖文件
+COPY requirements.txt ./
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+
+# 复制全部项目文件
+COPY . ./
+
+# 暴露 Streamlit 端口
+EXPOSE 8501
+
+# 设置环境变量，禁用 Streamlit telemetry（可选）
+ENV STREAMLIT_TELEMETRY=0
+
+# 启动应用
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
